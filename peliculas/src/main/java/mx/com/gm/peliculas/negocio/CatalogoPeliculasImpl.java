@@ -50,7 +50,7 @@ public class CatalogoPeliculasImpl implements CatalogoPeliculas {
         try{
             List<Pelicula> lista = datos.listar(nombreArchivo);
             for(Pelicula pelicula : lista){
-                System.out.println("Pelicula " + pelicula);
+                System.out.println("Nombre: " + pelicula.getNombre().toString());
             }   
 
         }catch(AccesoDatosEx ex){
@@ -65,7 +65,7 @@ public class CatalogoPeliculasImpl implements CatalogoPeliculas {
         Pelicula pelicula = new Pelicula(nombrePelicula);
         String resultado = null;
         try {
-            resultado = datos.buscar(nombreArchivo, resultado);
+            resultado = datos.buscar(nombreArchivo, nombrePelicula);
             
         } catch(LecturaDatosEx ex){
             System.out.println("Error al buscar la pelicula");

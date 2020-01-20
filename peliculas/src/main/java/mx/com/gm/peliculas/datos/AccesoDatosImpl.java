@@ -68,7 +68,8 @@ public class AccesoDatosImpl implements AccesoDatos{
         
         try{
             PrintWriter salida = new PrintWriter(new FileWriter(archivo, anexar));
-            salida.println(pelicula.toString());
+            //salida.println(pelicula.toString());
+            salida.println(pelicula.getNombre().toString());
             salida.close();
             
             System.out.println("Se ha escrito correctamente el archivo");
@@ -94,9 +95,10 @@ public class AccesoDatosImpl implements AccesoDatos{
             while(linea != null){
                 
                 if(buscar != null && buscar.equalsIgnoreCase(linea)){
-                    resultado = "Pelicula: " + linea + "encontrada en la posicion " + i;
+                    resultado = "Pelicula: " + linea + " encontrada en la posicion " + i;
                     break;
                 }
+                linea = entrada.readLine();
                 i++;
             }
             entrada.close();
