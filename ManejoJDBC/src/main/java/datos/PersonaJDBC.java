@@ -1,17 +1,17 @@
 package datos;
 
+
 import domain.Persona;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class PersonaJDBC {
     private static final String SQL_SELECT = "SELECT id_persona, nombre, apellido, email, telefono FROM persona";
     private static final String SQL_INSERT = "INSERT INTO persona(nombre, apellido, email, telefono) VALUES(?, ?, ?, ?)";
     private static final String SQL_UPDATE = "UPDATE persona SET nombre=?, apellido=?, email=?, telefono=? WHERE id_persona = ?";
     private static final String SQL_DELETE = "DELETE FROM persona WHERE id_persona=?";
+    private static final String SQL_SELECT_NOMBRE = "SELECT id_persona, nombre, apellido, email, telefono FROM persona WHERE NOMBRE = ?";
     
     public List<Persona> select(){
         Connection conn = null;
@@ -129,5 +129,38 @@ public class PersonaJDBC {
         }
         
         return rows;
+    }
+    
+    public Persona select_nombre(String nombre){
+        
+        Persona persona = new Persona();
+        Connection cn = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try {
+            
+            cn = Conexion.getConnection();
+            st = cn.prepareStatement(SQL_SELECT_NOMBRE);
+            
+            st.setString(0, nombre);
+            
+            rs = st.executeQuery();
+            
+            persona.setId_persona(rs.getInt(0));
+            persona.setNombre(rs.getString(1));
+            persona.setApellido(rs.getString(2));
+            persona.setEmail(rs.getString(3));
+            persona.setTelefono(rs.getString(4));
+            
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+        }
+        finally{
+            Conexion.close(cn);
+            Conexion.close(st);
+            Conexion.close(rs);
+        }
+        
+        return persona;
     }
 }
