@@ -1,14 +1,14 @@
 package datos;
 
 
-import domain.Persona;
+import domain.PersonaDTO;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class PersonaJDBC {  
+public class PersonaDaoJDBC implements PersonaDAO{  
     private Connection conexionTran;
     private static final String SQL_SELECT = "SELECT id_persona, nombre, apellido, email, telefono FROM personas";
     private static final String SQL_INSERT = "INSERT INTO personas(nombre, apellido, email, telefono) VALUES(?, ?, ?, ?)";
@@ -16,20 +16,20 @@ public class PersonaJDBC {
     private static final String SQL_DELETE = "DELETE FROM personas WHERE id_persona=?";
     private static final String SQL_SELECT_NOMBRE = "SELECT id_persona, nombre, apellido, email, telefono FROM personas WHERE NOMBRE = ?";
     
-    public PersonaJDBC(){
+    public PersonaDaoJDBC(){
         
     }
     
-    public PersonaJDBC(Connection conexionTran) {
+    public PersonaDaoJDBC(Connection conexionTran) {
         this.conexionTran = conexionTran;
     }
     
-    public List<Persona> select() throws SQLException{
+    public List<PersonaDTO> select() throws SQLException{
         Connection cn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        Persona persona = null;
-        List<Persona> personas = new ArrayList<Persona>();
+        PersonaDTO persona = null;
+        List<PersonaDTO> personas = new ArrayList<PersonaDTO>();
         
         try {
             cn =  this.conexionTran != null ? this.conexionTran : Conexion.getConnection();
@@ -43,7 +43,7 @@ public class PersonaJDBC {
                 String email = rs.getString("email");
                 String telefono = rs.getString("telefono");
                 
-                persona = new Persona();
+                persona = new PersonaDTO();
                 persona.setId_persona(id_persona);
                 persona.setNombre(nombre);
                 persona.setApellido(apellido);
@@ -65,7 +65,7 @@ public class PersonaJDBC {
         return personas;
     }
     
-    public int insert(Persona persona) throws SQLException{
+    public int insert(PersonaDTO persona) throws SQLException{
         Connection cn = null;
         PreparedStatement stmt = null;
         int rows = 0;
@@ -91,7 +91,7 @@ public class PersonaJDBC {
         return rows;
     }
     
-    public int update(Persona persona) throws SQLException{
+    public int update(PersonaDTO persona) throws SQLException{
         Connection cn = null;
         PreparedStatement stmt = null;
         int rows = 0;
@@ -121,7 +121,7 @@ public class PersonaJDBC {
         return rows;
     }
     
-    public int delete(Persona persona) throws SQLException{
+    public int delete(PersonaDTO persona) throws SQLException{
         Connection cn = null;
         PreparedStatement stmt = null;
         int rows = 0;
@@ -145,9 +145,9 @@ public class PersonaJDBC {
         return rows;
     }
     
-    public Persona select_nombre(String nombre) throws SQLException{
+    public PersonaDTO select_nombre(String nombre) throws SQLException{
         
-        Persona persona = new Persona();
+        PersonaDTO persona = new PersonaDTO();
         Connection cn = null;
         PreparedStatement st = null;
         ResultSet rs = null;

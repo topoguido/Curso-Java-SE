@@ -9,7 +9,7 @@ package domain;
  *
  * @author GE0022
  */
-public class Usuario {
+public class UsuarioDTO {
     
     private int id_usuario;
     private String usuario;

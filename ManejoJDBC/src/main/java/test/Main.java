@@ -1,18 +1,18 @@
 package test;
 
 import datos.Conexion;
-import datos.PersonaJDBC;
-import datos.UsuarioJDBC;
-import domain.Persona;
-import domain.Usuario;
+import datos.PersonaDAO;
+import datos.PersonaDaoJDBC;
+import datos.UsuarioDAO;
+import datos.UsuarioDaoJDBC;
+import domain.PersonaDTO;
+import domain.UsuarioDTO;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import menu.MenuPersonas;
 import menu.MenuPrincipal;
 import menu.MenuUsuarios;
@@ -40,8 +40,8 @@ public class Main {
                 switch(opcion){
                     case 1:
                         String nombrePersona =null;
-                        Persona persona = new Persona();
-                        PersonaJDBC personaJDBC = new PersonaJDBC(cn);
+                        PersonaDTO persona = new PersonaDTO();
+                        PersonaDAO personaDAO = new PersonaDaoJDBC(cn);
                         //opcion = menuPersonas.imprimir();
                         while(opcion != 0){
 
@@ -60,7 +60,7 @@ public class Main {
                                     System.out.println("Ingrese el telefono: ");
                                     persona.setTelefono(scanner.nextLine());
 
-                                    if(personaJDBC.insert(persona) >= 0){
+                                    if(personaDAO.insert(persona) >= 0){
                                         cn.commit();
                                     }
 
@@ -68,9 +68,9 @@ public class Main {
 
                                 case 2:
                                     // listar personas
-                                    List<Persona> listaPersonas = new ArrayList();
-                                    listaPersonas = personaJDBC.select();
-                                    for(Persona pers: listaPersonas){
+                                    List<PersonaDTO> listaPersonas = new ArrayList();
+                                    listaPersonas = personaDAO.select();
+                                    for(PersonaDTO pers: listaPersonas){
                                         System.out.println(pers.toString());
                                     }
                                     break;
@@ -80,8 +80,8 @@ public class Main {
 
                                     System.out.println("Ingrese el nombre de la persona a borrar");
                                     nombrePersona = scanner.nextLine();
-                                    persona = personaJDBC.select_nombre(nombrePersona);
-                                    if(personaJDBC.delete(persona) >= 0){
+                                    persona = personaDAO.select_nombre(nombrePersona);
+                                    if(personaDAO.delete(persona) >= 0){
                                         cn.commit();
                                     }
 
@@ -91,7 +91,7 @@ public class Main {
                                     // actualizar persona
                                     System.out.println("Ingrese el nombre de la persona a actualizar");
                                     nombrePersona = scanner.nextLine();
-                                    persona = personaJDBC.select_nombre(nombrePersona);
+                                    persona = personaDAO.select_nombre(nombrePersona);
                                     System.out.println("Ingrese el apellido: ");
                                     persona.setApellido(scanner.nextLine());
                                     System.out.println("Ingrese el email: ");
@@ -99,7 +99,7 @@ public class Main {
                                     System.out.println("Ingrese el telefono: ");
                                     persona.setTelefono(scanner.nextLine());
 
-                                    if(personaJDBC.update(persona) >= 0){
+                                    if(personaDAO.update(persona) >= 0){
                                         cn.commit();
                                     }
                                     break;
@@ -117,8 +117,8 @@ public class Main {
                     case 2:
                         // Menu usuarios
                         String nombreUsuario = null;
-                        UsuarioJDBC usuarioJDBC = new UsuarioJDBC(cn);
-                        Usuario usuario = new Usuario();
+                        UsuarioDAO usuarioDAO = new UsuarioDaoJDBC(cn);
+                        UsuarioDTO usuario = new UsuarioDTO();
                         //opcion = menuUsuarios.imprimir();
 
                         while(opcion != 0){
@@ -133,7 +133,7 @@ public class Main {
                                     System.out.println("Ingrese el password: ");
                                     usuario.setPassword(scanner.nextLine());
 
-                                    if(usuarioJDBC.insert(usuario) >= 0){
+                                    if(usuarioDAO.insert(usuario) >= 0){
                                         cn.commit();
                                     }
 
@@ -141,10 +141,10 @@ public class Main {
 
                                 case 2:
                                     // listar usuarios
-                                    List<Usuario> lista = new ArrayList();
-                                    lista = usuarioJDBC.select();
+                                    List<UsuarioDTO> lista = new ArrayList();
+                                    lista = usuarioDAO.select();
 
-                                    for( Usuario usuarioObj: lista){
+                                    for( UsuarioDTO usuarioObj: lista){
                                         System.out.println("Usuario: " + usuarioObj.getUsuario());
                                     }
 
@@ -154,8 +154,8 @@ public class Main {
                                     // borrar usuario
                                     System.out.println("Ingrese el usuario a borrar:  ");
                                     usuario.setUsuario(scanner.nextLine());
-                                    usuario = usuarioJDBC.select_usuario(usuario.getUsuario());
-                                    if(usuarioJDBC.delete(usuario) >= 0){
+                                    usuario = usuarioDAO.select_usuario(usuario.getUsuario());
+                                    if(usuarioDAO.delete(usuario) >= 0){
                                         cn.commit();
                                     }
                                     break;
@@ -163,13 +163,13 @@ public class Main {
                                     // actualizar usuario
                                     System.out.println("Ingrese el usuario a actualizar:  ");
                                     usuario.setUsuario(scanner.nextLine());
-                                    usuario = usuarioJDBC.select_usuario(usuario.getUsuario());
+                                    usuario = usuarioDAO.select_usuario(usuario.getUsuario());
                                     System.out.println("Ingrese el nuevo usuario:");
                                     usuario.setUsuario(scanner.nextLine());
                                     System.out.println("Ingrese el password: ");
                                     usuario.setPassword(scanner.nextLine());
 
-                                    if( usuarioJDBC.update(usuario) >= 0 ){
+                                    if( usuarioDAO.update(usuario) >= 0 ){
                                         cn.commit();
                                     }
                                     break;
