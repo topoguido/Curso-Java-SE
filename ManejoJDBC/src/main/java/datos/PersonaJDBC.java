@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PersonaJDBC {
-    private static final String SQL_SELECT = "SELECT id_persona, nombre, apellido, email, telefono FROM persona";
-    private static final String SQL_INSERT = "INSERT INTO persona(nombre, apellido, email, telefono) VALUES(?, ?, ?, ?)";
-    private static final String SQL_UPDATE = "UPDATE persona SET nombre=?, apellido=?, email=?, telefono=? WHERE id_persona = ?";
-    private static final String SQL_DELETE = "DELETE FROM persona WHERE id_persona=?";
-    private static final String SQL_SELECT_NOMBRE = "SELECT id_persona, nombre, apellido, email, telefono FROM persona WHERE NOMBRE = ?";
+    private static final String SQL_SELECT = "SELECT id_persona, nombre, apellido, email, telefono FROM personas";
+    private static final String SQL_INSERT = "INSERT INTO personas(nombre, apellido, email, telefono) VALUES(?, ?, ?, ?)";
+    private static final String SQL_UPDATE = "UPDATE personas SET nombre=?, apellido=?, email=?, telefono=? WHERE id_persona = ?";
+    private static final String SQL_DELETE = "DELETE FROM personas WHERE id_persona=?";
+    private static final String SQL_SELECT_NOMBRE = "SELECT id_persona, nombre, apellido, email, telefono FROM personas WHERE NOMBRE = ?";
     
     public List<Persona> select(){
         Connection conn = null;
@@ -142,15 +142,19 @@ public class PersonaJDBC {
             cn = Conexion.getConnection();
             st = cn.prepareStatement(SQL_SELECT_NOMBRE);
             
-            st.setString(0, nombre);
+            st.setString(1, nombre);
             
             rs = st.executeQuery();
             
-            persona.setId_persona(rs.getInt(0));
-            persona.setNombre(rs.getString(1));
-            persona.setApellido(rs.getString(2));
-            persona.setEmail(rs.getString(3));
-            persona.setTelefono(rs.getString(4));
+            if(rs.next()){
+                System.out.println("Ejecutando query:" + SQL_SELECT_NOMBRE);           
+                persona.setId_persona(rs.getInt(1));
+                persona.setNombre(rs.getString(2));
+                persona.setApellido(rs.getString(3));
+                persona.setEmail(rs.getString(4));
+                persona.setTelefono(rs.getString(5));
+            
+            }
             
         } catch (SQLException e) {
             e.printStackTrace(System.out);

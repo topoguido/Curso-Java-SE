@@ -4,16 +4,19 @@ import datos.PersonaJDBC;
 import datos.UsuarioJDBC;
 import domain.Persona;
 import domain.Usuario;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import menu.MenuPersonas;
 import menu.MenuPrincipal;
 import menu.MenuUsuarios;
 
 public class Main {
     
-    public static void main(String[] args) { 
+    public static void main(String[] args) throws IOException { 
         
         MenuPrincipal menuPrincipal = new MenuPrincipal();
         MenuPersonas menuPersonas = new MenuPersonas();
@@ -30,8 +33,10 @@ public class Main {
                     String nombrePersona =null;
                     Persona persona = new Persona();
                     PersonaJDBC personaJDBC = new PersonaJDBC();
-                    opcion = menuPersonas.imprimir();
+                    //opcion = menuPersonas.imprimir();
                     while(opcion != 0){
+                        
+                        opcion = menuPersonas.imprimir();
 
                         switch(opcion){
                             // Menu personas
@@ -83,6 +88,13 @@ public class Main {
 
                                 personaJDBC.update(persona);
                                 break;
+                                
+                            case 0:
+                                break;
+                            
+                            default:
+                                System.out.println("La opcion ingresada no es correcta");
+                                
                         } // fin switch
                     } //fin while
                     break;
@@ -92,9 +104,12 @@ public class Main {
                     String nombreUsuario = null;
                     UsuarioJDBC usuarioJDBC = new UsuarioJDBC();
                     Usuario usuario = new Usuario();
-                    opcion = menuUsuarios.imprimir();
+                    //opcion = menuUsuarios.imprimir();
                     
                     while(opcion != 0){
+                        
+                        opcion = menuUsuarios.imprimir();
+                        
                         switch(opcion){
                             case 1:
                                 // crear usuario
@@ -137,6 +152,12 @@ public class Main {
                                 
                                 usuarioJDBC.update(usuario);
                                 break;
+                                
+                            case 0:
+                                break;
+                                
+                            default:
+                                System.out.println("La opcion ingresada no es correcta");
                         }
                         
                     }
@@ -144,36 +165,10 @@ public class Main {
                     break;
                     
             }
+            
+            opcion = menuPrincipal.imprimir();
         }
-        PersonaJDBC personaJDBC = new PersonaJDBC();
-        List<Persona> personas = personaJDBC.select();
-        
-        for(Persona persona: personas){
-            System.out.println("persona:" + persona);
-        }
-        
-        //Prueba insert
-//        Persona persona = new Persona();
-//        persona.setNombre("Maria");
-//        persona.setApellido("Lara");
-//        persona.setEmail("mlara@mail.com");
-//        persona.setTelefono("55668899");
 
-//        personaJDBC.insert(persona);
-      
-//        //Prueba update
-//        Persona persona = new Persona();
-//        persona.setId_persona(3);
-//        persona.setNombre("Mayra");
-//        persona.setApellido("Lara");
-//        persona.setEmail("mlara@mail.com");
-//        persona.setTelefono("55668899");
-//        
-//        personaJDBC.update(persona);
-
-          Persona persona = new Persona();
-          persona.setId_persona(3);
-          
-          personaJDBC.delete(persona);
+        
     }
 }
