@@ -14,13 +14,22 @@ import java.util.List;
  */
 public class UsuarioJDBC {
     
+    private Connection conexionTran;
     public static final String SQL_SELECT = "SELECT ID_USUARIO, USUARIO, PASSWORD FROM USUARIOS";
     public static final String SQL_INSERT = "INSERT INTO USUARIOS (USUARIO,PASSWORD) VALUES (?,?)";
     public static final String SQL_DELETE = "DELETE FROM USUARIOS WHERE ID_USUARIO = ?";
     public static final String SQL_UPDATE = "UPDATE USUARIOS SET USUARIO = ?, PASSWORD = ? WHERE ID_USUARIO = ?";
     private static final String SQL_SELECT_USUARIO = "SELECT ID_USUARIO, USUARIO, PASSWORD FROM USUARIOS WHERE USUARIO = ?";
+
+    public UsuarioJDBC(Connection conexionTran) {
+        this.conexionTran = conexionTran;
+    }
     
-    public List<Usuario> select(){
+    public UsuarioJDBC(){
+        
+    }
+    
+    public List<Usuario> select() throws SQLException{
         
         Connection cn = null;
         PreparedStatement st = null;
@@ -29,7 +38,7 @@ public class UsuarioJDBC {
         
         try {
             
-            cn = Conexion.getConnection();
+            cn =  this.conexionTran != null ? this.conexionTran : Conexion.getConnection();
             st = cn.prepareStatement(SQL_SELECT);
             rs = st.executeQuery();
             
@@ -43,50 +52,48 @@ public class UsuarioJDBC {
              usuarios.add(usuario);
              
             }
-            
-        } catch (SQLException e) {
-            e.printStackTrace(System.out);
         }
         finally{
-            Conexion.close(cn);
+            if(this.conexionTran == null){
+                Conexion.close(cn);
+            }
             Conexion.close(st);
             Conexion.close(rs);
         }
         return usuarios;
     }
     
-    public int insert(Usuario usuario){
+    public int insert(Usuario usuario) throws SQLException{
         Connection cn = null;
         PreparedStatement st = null;
         int resultado = 0;
         
         try {
-            cn = Conexion.getConnection();
+            cn =  this.conexionTran != null ? this.conexionTran : Conexion.getConnection();
             st = cn.prepareStatement(SQL_INSERT);
             st.setString(1, usuario.getUsuario());
             st.setString(2, usuario.getPassword());
             resultado = st.executeUpdate();
             
             System.out.println("Registros afectados: " + resultado);
-            
-        } catch (SQLException e) {
-            e.printStackTrace(System.out);
         }
         finally{
-            Conexion.close(cn);
+            if(this.conexionTran == null){
+                Conexion.close(cn);
+            }
             Conexion.close(st);
         }
                 
         return resultado;
     }
     
-    public int update(Usuario usuario){
+    public int update(Usuario usuario) throws SQLException{
         Connection cn = null;
         PreparedStatement st = null;
         int resultado = 0;
         
         try {
-            cn = Conexion.getConnection();
+            cn =  this.conexionTran != null ? this.conexionTran : Conexion.getConnection();
             st = cn.prepareStatement(SQL_UPDATE);
             
             st.setString(1, usuario.getUsuario());
@@ -95,25 +102,24 @@ public class UsuarioJDBC {
             resultado = st.executeUpdate();
             
             System.out.println("Registros afectados: " + resultado);
-            
-        } catch (SQLException e) {
-            e.printStackTrace(System.out);
         }
         finally{
-            Conexion.close(cn);
+            if(this.conexionTran == null){
+                Conexion.close(cn);
+            }
             Conexion.close(st);
         }
                 
         return resultado;
     }
     
-    public int delete(Usuario usuario){
+    public int delete(Usuario usuario) throws SQLException{
         Connection cn = null;
         PreparedStatement st = null;
         int resultado = 0;
         
         try {
-                cn = Conexion.getConnection();
+                cn =  this.conexionTran != null ? this.conexionTran : Conexion.getConnection();
                 st = cn.prepareStatement(SQL_DELETE);
                 
                 st.setInt(1,usuario.getId_usuario());
@@ -122,17 +128,17 @@ public class UsuarioJDBC {
                 
                 System.out.println("Registros borrados: " + resultado);
                 
-        } catch (SQLException e) {
-            e.printStackTrace(System.out);
         }
         finally{
-            Conexion.close(cn);
+            if(this.conexionTran == null){
+               Conexion.close(cn);
+            }
             Conexion.close(st);
         }
         return resultado;
     }
     
-    public Usuario select_usuario(String nombreUsuario){
+    public Usuario select_usuario(String nombreUsuario) throws SQLException{
         
         Usuario usuario = new Usuario();
         Connection cn = null;
@@ -140,7 +146,7 @@ public class UsuarioJDBC {
         ResultSet rs = null;
         try {
             
-            cn = Conexion.getConnection();
+            cn =  this.conexionTran != null ? this.conexionTran : Conexion.getConnection();
             st = cn.prepareStatement(SQL_SELECT_USUARIO);
             
             st.setString(1, nombreUsuario);
@@ -152,12 +158,11 @@ public class UsuarioJDBC {
                 usuario.setUsuario(rs.getString(2));
                 usuario.setPassword(rs.getString(3));
             }
-            
-        } catch (SQLException e) {
-            e.printStackTrace(System.out);
         }
         finally{
-            Conexion.close(cn);
+            if(this.conexionTran == null){
+                Conexion.close(cn);
+            }
             Conexion.close(st);
             Conexion.close(rs);
         }
