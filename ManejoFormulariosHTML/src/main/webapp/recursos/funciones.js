@@ -56,7 +56,7 @@ function validarForma(forma){
     }
     
     // Formulario es valido
-    alert("Formulario valido");
+    //alert("Formulario valido");
     return true;
 }
 
