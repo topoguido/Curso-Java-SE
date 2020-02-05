@@ -23,13 +23,11 @@ public class CarritoServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
          response.setContentType("text/html;charset=UTF-8");
 
-        
-
         // creamos o recuperamos el objeto httpsession
         HttpSession sesion = request.getSession();
 
         //Recuperamos lista de articulos si es que existen
-        List<String> listaArticulos = (List<String>) request.getAttribute("articulo");
+        List<String> listaArticulos = (List<String>) sesion.getAttribute("articulo");
 
         // verificamos si la lista de articulos existe
         if (listaArticulos == null) {
@@ -60,7 +58,5 @@ public class CarritoServlet extends HttpServlet {
             out.print("<br>");
             out.print("<a href='/EjemploCarritoCompras'>Regresar al inicio</a>");
         }
-
     }
-
 }
